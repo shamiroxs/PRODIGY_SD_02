@@ -22,7 +22,7 @@ BUTTON_FONT = pygame.font.Font(None, 48)
 
 # Screen Setup
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Guess My Number - Screen 3")
+pygame.display.set_caption("Guessing Game")
 
 # Button Dimensions
 button_rect = pygame.Rect(WIDTH // 2 + 80, HEIGHT // 2 - 20, 100, 50)
