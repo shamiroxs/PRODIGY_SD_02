@@ -2,10 +2,8 @@ import pygame
 import sys
 import random
 
-# Initialize Pygame
 pygame.init()
 
-# Screen Dimensions and Colors
 WIDTH, HEIGHT = 800, 600
 CYAN = (0, 255, 255)
 WHITE = (255, 255, 255)
@@ -15,16 +13,13 @@ GOLD_YELLOW = (255, 215, 0)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 
-# Fonts
 TITLE_FONT = pygame.font.Font(None, 64)
 TEXT_FONT = pygame.font.Font(None, 36)
 BUTTON_FONT = pygame.font.Font(None, 48)
 
-# Screen Setup
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Guessing Game")
 
-# Button Dimensions
 button_rect = pygame.Rect(WIDTH // 2 + 80, HEIGHT // 2 - 20, 100, 50)
 
 
@@ -33,8 +28,8 @@ def draw_timer(seconds_left):
     center = (WIDTH - 100, 50)
     radius = 40
     total_angle = 360
-    angle = (seconds_left / 60) * total_angle  # Updated to 60 seconds
-
+    angle = (seconds_left / 60) * total_angle  
+    
     # Draw the background circle
     pygame.draw.circle(screen, BLACK, center, radius)
 
@@ -52,29 +47,23 @@ def draw_game(random_number, t1_text, user_guess, seconds_left, is_game_over, wo
     """Render the gameplay elements."""
     screen.fill(BLACK)
 
-    # Title Text
     title_surface = TITLE_FONT.render(t1_text, True, WHITE)
     title_rect = title_surface.get_rect(center=(WIDTH // 2, HEIGHT // 4))
     screen.blit(title_surface, title_rect)
 
-    # Timer
     draw_timer(seconds_left)
 
-    # Text Input Field
     text_field_rect = pygame.Rect(WIDTH // 2 - 100, HEIGHT // 2 - 20, 150, 50)
     pygame.draw.rect(screen, GREY, text_field_rect, border_radius=5)
 
-    # Render user input text in white
     text_surface = TEXT_FONT.render(user_guess, True, WHITE)
     text_rect = text_surface.get_rect(center=text_field_rect.center)
     screen.blit(text_surface, text_rect)
 
-    # Button
     mouse_pos = pygame.mouse.get_pos()
     button_color = CYAN if button_rect.collidepoint(mouse_pos) else (0, 200, 200)
     pygame.draw.rect(screen, button_color, button_rect, border_radius=5)
 
-    # Button Text
     button_surface = BUTTON_FONT.render("OK", True, BLACK)
     button_text_rect = button_surface.get_rect(center=button_rect.center)
     screen.blit(button_surface, button_text_rect)
@@ -105,15 +94,14 @@ def main():
     """Main loop for Screen 3."""
     clock = pygame.time.Clock()
 
-    # Initialize Variables
     random_number = random.randint(0, 1000)
     user_guess = ""
     t1_text = "Guess My Number!"
     is_game_over = False
     won = False
     timer_start = pygame.time.get_ticks()
-    seconds_left = 60  # Updated to 60 seconds
-
+    seconds_left = 60  
+    
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -121,7 +109,6 @@ def main():
                 sys.exit()
 
             if not is_game_over:
-                # Handle Text Input
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_BACKSPACE:
                         user_guess = user_guess[:-1]
@@ -130,7 +117,6 @@ def main():
                     elif event.unicode.isdigit():
                         user_guess += event.unicode
 
-                # Handle Button Click
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if button_rect.collidepoint(event.pos):
                         if user_guess.isdigit():
@@ -142,9 +128,8 @@ def main():
                             else:
                                 is_game_over = True
                                 won = True
-                        user_guess = ""  # Clear text field after clicking OK
-
-        # Timer
+                        user_guess = ""  # Clear text field 
+        
         if not is_game_over:  # Stop updating timer when game is over
             elapsed_time = (pygame.time.get_ticks() - timer_start) / 1000
             seconds_left = max(0, 60 - int(elapsed_time))
@@ -152,20 +137,17 @@ def main():
             if seconds_left == 0:
                 is_game_over = True
 
-        # Draw Game Elements
         restart_rect = draw_game(random_number, t1_text, user_guess, seconds_left, is_game_over, won)
 
         if is_game_over:
             if event.type == pygame.MOUSEBUTTONDOWN and restart_rect.collidepoint(event.pos):
                 return "screen1" if won else "screen3"  # Navigate based on popup type
 
-        # Update Display
         pygame.display.flip()
         clock.tick(60)
 
 
 if __name__ == "__main__":
-    # Run Screen 3
     next_screen = main()
     print(f"Transitioning to: {next_screen}")
 
